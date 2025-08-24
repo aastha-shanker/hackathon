@@ -26,7 +26,7 @@ import {
     apiKey: "AIzaSyCzAnKxMW-_B-h-EP9OVC74LBwHemf0LLM",
     authDomain: "sahayata-hackathon.firebaseapp.com",
     projectId: "sahayata-hackathon",
-    storageBucket: "sahayata-hackathon.firebasestorage.app",
+    storageBucket: "sahayata-hackathon.appspot.com",
     messagingSenderId: "137580379612",
     appId: "1:137580379612:web:6706fe3992c7d20ee7a319",
     measurementId: "G-8FH9NS7HCK"
