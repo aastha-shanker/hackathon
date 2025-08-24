@@ -238,7 +238,7 @@ async function fileToBase64(file) {
         reader.readAsDataURL(file);
     });
 }
-
+const scanImageBtn = document.querySelector("#scan-image-btn");
 // Add an event listener to the scan button
 scanImageBtn.addEventListener('click', async () => {
     const file = itemImageUpload.files[0];
