@@ -1,9 +1,7 @@
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-  import { 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+import { 
     getAuth, 
     onAuthStateChanged,
     createUserWithEmailAndPassword, 
@@ -12,10 +10,20 @@
     GoogleAuthProvider,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    query, 
+    orderBy, 
+    onSnapshot 
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
+// Import the Google Generative AI SDK
+import { GoogleGenerativeAI } from "https://unpkg.com/@google/generative-ai";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
     apiKey: "AIzaSyCzAnKxMW-_B-h-EP9OVC74LBwHemf0LLM",
     authDomain: "sahayata-hackathon.firebaseapp.com",
     projectId: "sahayata-hackathon",
@@ -23,16 +31,22 @@
     messagingSenderId: "137580379612",
     appId: "1:137580379612:web:6706fe3992c7d20ee7a319",
     measurementId: "G-8FH9NS7HCK"
-  };
+};
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
+// Initialize Firestore
+const db = getFirestore(app);
 
-  // --- DOM Elements for Authentication ---
+// Initialize the Google Generative AI client
+const GOOGLE_API_KEY = "YOUR_API_KEY_HERE"; // Make sure to replace this with your actual API key
+const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
+
+// --- DOM Elements for Authentication ---
 const loginSignupBtn = document.getElementById('login-signup-btn');
 const signOutBtn = document.getElementById('sign-out-btn');
 const userInfo = document.getElementById('user-info');
@@ -44,6 +58,15 @@ const signupForm = document.getElementById('signup-form');
 const googleSigninBtn = document.getElementById('google-signin-btn');
 const authError = document.getElementById('auth-error');
 const authTabs = document.querySelectorAll('.auth-tab');
+
+// --- DOM Elements for AI Image Scanning ---
+const itemImageUpload = document.getElementById('item-image-upload');
+const scanImageBtn = document.getElementById('scan-image-btn');
+const scanResultsContainer = document.getElementById('scan-results-container');
+const loadingIndicator = document.getElementById('loading-indicator');
+const identifiedItemsText = document.getElementById('identified-items-text');
+const populateFormBtn = document.getElementById('populate-form-btn');
+const homeFormDescription = document.getElementById('home-form-description');
 
 // --- 1. Core Authentication Listener ---
 onAuthStateChanged(auth, user => {
@@ -123,33 +146,26 @@ const showPage = (pageId) => {
 };
 
 // --- Event Listeners for Navigation ---
-
-// Listener for the category cards on the homepage
 document.querySelectorAll('.category-card-food, .category-card-medical, .category-card-education, .category-card-house').forEach(card => {
     card.addEventListener('click', () => {
         const pageId = card.dataset.page;
-        // You'll need to add the other pages' HTML for this to fully work
         if (pageId) {
             showPage(pageId);
         }
     });
 });
 
-// Listener for all "back" buttons to return to the homepage
 document.querySelectorAll('.back-button').forEach(button => {
     button.addEventListener('click', () => {
         showPage('page-home');
     });
 });
 
-// Listener for the logo in the header to return home
 document.getElementById('home-button').addEventListener('click', () => {
     showPage('page-home');
 });
 
 // --- Firestore Data Handling ---
-
-// This code listens for submissions on any form that has a 'data-collection' attribute
 document.querySelectorAll('form[data-collection]').forEach(form => {
     if (form) {
         form.addEventListener('submit', async e => {
@@ -180,7 +196,6 @@ document.querySelectorAll('form[data-collection]').forEach(form => {
 });
 
 // --- Real-Time Data Listeners ---
-
 function setupRealtimeListener(collectionName, gridElementId, cardRenderer) { 
     const q = query(collection(db, collectionName), orderBy("createdAt", "desc")); 
     const grid = document.getElementById(gridElementId); 
@@ -195,7 +210,6 @@ function setupRealtimeListener(collectionName, gridElementId, cardRenderer) {
 }
 
 // --- Card Creation Functions ---
-
 const createFoodCard = data => { 
     const card = document.createElement('div'); 
     card.className = 'listing-card'; 
@@ -229,6 +243,9 @@ setupRealtimeListener('foodDonations', 'food-listing-grid', createFoodCard);
 setupRealtimeListener('medicalDonations', 'medical-listing-grid', createMedicalCard);
 setupRealtimeListener('educationDonations', 'education-listing-grid', createEducationCard);
 setupRealtimeListener('homeDonations', 'home-listing-grid', createHomeCard);
+
+// --- AI Image Scanning ---
+
 // Function to convert a File to a base64 string
 async function fileToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -238,7 +255,7 @@ async function fileToBase64(file) {
         reader.readAsDataURL(file);
     });
 }
-const scanImageBtn = document.querySelector("#scan-image-btn");
+
 // Add an event listener to the scan button
 scanImageBtn.addEventListener('click', async () => {
     const file = itemImageUpload.files[0];
@@ -289,7 +306,6 @@ scanImageBtn.addEventListener('click', async () => {
         // Event listener for the "Use these items" button
         populateFormBtn.addEventListener('click', () => {
             homeFormDescription.value = textResponse;
-            // You can add more logic here to automatically fill other fields based on the response
         });
         
     } catch (error) {
