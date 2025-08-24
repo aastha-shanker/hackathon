@@ -63,7 +63,6 @@ onAuthStateChanged(auth, user => {
     }
 });
 
-// --- 2. Event Listeners for Forms and Buttons ---
 loginSignupBtn.addEventListener('click', () => {
     showPage('page-auth');
 });
@@ -99,7 +98,6 @@ googleSigninBtn.addEventListener('click', () => {
         });
 });
 
-// --- 3. UI Logic for the Auth Page Tabs ---
 authTabs.forEach(tab => {
     tab.addEventListener('click', () => {
         authTabs.forEach(t => t.classList.remove('active'));
@@ -109,9 +107,7 @@ authTabs.forEach(tab => {
         authError.textContent = '';
     });
 });
-// --- Page Navigation Logic ---
 
-// This is the function that switches which page is visible
 const showPage = (pageId) => {
     // First, hide all the pages
     document.querySelectorAll('.page').forEach(page => {
@@ -229,7 +225,6 @@ const createHomeCard = data => {
     return card; 
 };
 
-// --- Initialize all listeners ---
 setupRealtimeListener('foodDonations', 'food-listing-grid', createFoodCard);
 setupRealtimeListener('medicalDonations', 'medical-listing-grid', createMedicalCard);
 setupRealtimeListener('educationDonations', 'education-listing-grid', createEducationCard);
