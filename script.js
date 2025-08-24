@@ -1,4 +1,4 @@
-// Import Firebase SDK
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
 import { 
@@ -19,38 +19,35 @@ import {
     orderBy 
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-// --- Firebase Configuration ---
+// Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCzAnKxMW-_B-h-EP9OVC74LBwHemf0LLM",
     authDomain: "sahayata-hackathon.firebaseapp.com",
     projectId: "sahayata-hackathon",
-    storageBucket: "sahayata-hackathon.appspot.com",
+    storageBucket: "sahayata-hackathon.appspot.com", // Corrected URL
     messagingSenderId: "137580379612",
     appId: "1:137580379612:web:6706fe3992c7d20ee7a319",
     measurementId: "G-8FH9NS7HCK"
 };
 
-// Initialize Firebase
+// --- Initialize Firebase and its services ---
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// --- DOM Elements for Authentication ---
+// --- DOM Elements ---
 const loginSignupBtn = document.getElementById('login-signup-btn');
 const signOutBtn = document.getElementById('sign-out-btn');
 const userInfo = document.getElementById('user-info');
 const userEmailSpan = document.getElementById('user-email');
-
 const authPage = document.getElementById('page-auth');
 const loginForm = document.getElementById('login-form');
 const signupForm = document.getElementById('signup-form');
 const googleSigninBtn = document.getElementById('google-signin-btn');
 const authError = document.getElementById('auth-error');
 const authTabs = document.querySelectorAll('.auth-tab');
-
-// --- DOM Elements for AI Image Scanning ---
 const scanImageBtn = document.getElementById('scan-image-btn');
 const imageUploadInput = document.getElementById('item-image-upload');
 const scanResultsContainer = document.getElementById('scan-results-container');
@@ -65,7 +62,7 @@ onAuthStateChanged(auth, user => {
         loginSignupBtn.style.display = 'none';
         userInfo.style.display = 'flex';
         userEmailSpan.textContent = user.email;
-        if (authPage.classList.contains('active')) {
+        if (authPage && authPage.classList.contains('active')) {
             showPage('page-home');
         }
     } else {
@@ -100,36 +97,44 @@ document.querySelectorAll('.category-card-food, .category-card-medical, .categor
 });
 
 // --- 4. Event Listeners for Auth Forms ---
-loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-    signInWithEmailAndPassword(auth, email, password)
-        .catch(error => authError.textContent = error.message);
-});
-
-signupForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
-    createUserWithEmailAndPassword(auth, email, password)
-        .catch(error => authError.textContent = error.message);
-});
-
-googleSigninBtn.addEventListener('click', () => {
-    signInWithPopup(auth, provider)
-        .catch(error => authError.textContent = error.message);
-});
-
-authTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-        authTabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
-        document.getElementById(`${tab.dataset.tab}-form`).classList.add('active');
-        authError.textContent = '';
+if (loginForm) {
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        signInWithEmailAndPassword(auth, email, password)
+            .catch(error => authError.textContent = error.message);
     });
-});
+}
+
+if (signupForm) {
+    signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        createUserWithEmailAndPassword(auth, email, password)
+            .catch(error => authError.textContent = error.message);
+    });
+}
+
+if (googleSigninBtn) {
+    googleSigninBtn.addEventListener('click', () => {
+        signInWithPopup(auth, provider)
+            .catch(error => authError.textContent = error.message);
+    });
+}
+
+if (authTabs) {
+    authTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            authTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+            document.getElementById(`${tab.dataset.tab}-form`).classList.add('active');
+            if(authError) authError.textContent = '';
+        });
+    });
+}
 
 // --- 5. Firestore Data Handling ---
 document.querySelectorAll('form[data-collection]').forEach(form => {
@@ -212,28 +217,29 @@ setupRealtimeListener('educationDonations', 'education-listing-grid', createEduc
 setupRealtimeListener('homeDonations', 'home-listing-grid', createHomeCard);
 
 // --- 9. AI Image Scanning ---
-scanImageBtn.addEventListener('click', async () => {
-    const file = imageUploadInput.files[0];
-    if (!file) {
-        alert("Please upload an image first.");
-        return;
-    }
+if (scanImageBtn) {
+    scanImageBtn.addEventListener('click', async () => {
+        const file = imageUploadInput.files[0];
+        if (!file) {
+            alert("Please upload an image first.");
+            return;
+        }
 
-    scanResultsContainer.style.display = 'block';
-    loadingIndicator.style.display = 'block';
-    document.getElementById('scan-results').style.display = 'none';
+        scanResultsContainer.style.display = 'block';
+        loadingIndicator.style.display = 'block';
+        document.getElementById('scan-results').style.display = 'none';
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-        const base64ImageData = reader.result.split(',')[1];
-        const mimeType = file.type || "image/jpeg";
-        scanImageWithGemini(base64ImageData, mimeType);
-    };
-    reader.readAsDataURL(file);
-});
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64ImageData = reader.result.split(',')[1];
+            scanImageWithGemini(base64ImageData, file.type);
+        };
+        reader.readAsDataURL(file);
+    });
+}
 
 async function scanImageWithGemini(base64ImageData, mimeType = "image/jpeg") {
-    const apiKey = "YOUR_GOOGLE_API_KEY"; // <-- replace with your real API key
+    const apiKey = "AIzaSyAuD04hfA3dvBrjlIV2pvoKEKAaS9j2z-U"; // The environment will handle this if left blank
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     const payload = {
@@ -256,7 +262,7 @@ async function scanImageWithGemini(base64ImageData, mimeType = "image/jpeg") {
 
         const result = await response.json();
         const text = result.candidates?.[0]?.content?.parts?.[0]?.text || "No items detected.";
-
+        
         loadingIndicator.style.display = 'none';
         document.getElementById('scan-results').style.display = 'block';
         identifiedItemsText.textContent = text;
@@ -269,10 +275,12 @@ async function scanImageWithGemini(base64ImageData, mimeType = "image/jpeg") {
     }
 }
 
-populateFormBtn.addEventListener('click', () => {
-    const items = identifiedItemsText.textContent;
-    if (items) {
-        homeFormDescription.value = items;
-        alert('Description field has been filled. Please complete the rest of the form.');
-    }
-});
+if (populateFormBtn) {
+    populateFormBtn.addEventListener('click', () => {
+        const items = identifiedItemsText.textContent;
+        if (items) {
+            homeFormDescription.value = items;
+            alert('Description field has been filled. Please complete the rest of the form.');
+        }
+    });
+}
