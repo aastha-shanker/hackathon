@@ -1,9 +1,7 @@
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-  import { 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+import { 
     getAuth, 
     onAuthStateChanged,
     createUserWithEmailAndPassword, 
@@ -12,7 +10,6 @@
     GoogleAuthProvider,
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
 import { 
     getFirestore, 
     collection, 
@@ -22,24 +19,25 @@ import {
     orderBy 
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-  const firebaseConfig = {
+// Your web app's Firebase configuration
+const firebaseConfig = {
     apiKey: "AIzaSyCzAnKxMW-_B-h-EP9OVC74LBwHemf0LLM",
     authDomain: "sahayata-hackathon.firebaseapp.com",
     projectId: "sahayata-hackathon",
-    storageBucket: "sahayata-hackathon.appspot.com",
+    storageBucket: "sahayata-hackathon.appspot.com", // Corrected URL
     messagingSenderId: "137580379612",
     appId: "1:137580379612:web:6706fe3992c7d20ee7a319",
     measurementId: "G-8FH9NS7HCK"
-  };
+};
 
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const provider = new GoogleAuthProvider();
 
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-
-  const auth = getAuth(app);
-  const provider = new GoogleAuthProvider();
-
-
+// --- DOM Elements for Authentication ---
 const loginSignupBtn = document.getElementById('login-signup-btn');
 const signOutBtn = document.getElementById('sign-out-btn');
 const userInfo = document.getElementById('user-info');
@@ -52,9 +50,20 @@ const googleSigninBtn = document.getElementById('google-signin-btn');
 const authError = document.getElementById('auth-error');
 const authTabs = document.querySelectorAll('.auth-tab');
 
+// --- DOM Elements for AI Image Scanning ---
+const scanImageBtn = document.getElementById('scan-image-btn');
+const imageUploadInput = document.getElementById('item-image-upload');
+const scanResultsContainer = document.getElementById('scan-results-container');
+const loadingIndicator = document.getElementById('loading-indicator');
+const identifiedItemsText = document.getElementById('identified-items-text');
+const populateFormBtn = document.getElementById('populate-form-btn');
+const homeFormDescription = document.getElementById('home-form-description');
 
+
+// --- 1. Core Authentication Listener ---
 onAuthStateChanged(auth, user => {
     if (user) {
+        // User is signed IN
         loginSignupBtn.style.display = 'none';
         userInfo.style.display = 'flex';
         userEmailSpan.textContent = user.email;
@@ -62,29 +71,44 @@ onAuthStateChanged(auth, user => {
             showPage('page-home');
         }
     } else {
-
+        // User is signed OUT
         loginSignupBtn.style.display = 'block';
         userInfo.style.display = 'none';
         userEmailSpan.textContent = '';
     }
 });
 
-loginSignupBtn.addEventListener('click', () => {
-    showPage('page-auth');
+// --- 2. Page Navigation Logic ---
+const showPage = (pageId) => {
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.remove('active');
+    });
+    const activePage = document.getElementById(pageId);
+    if (activePage) {
+        activePage.classList.add('active');
+    }
+    window.scrollTo(0, 0);
+};
+
+// --- 3. Event Listeners for Navigation ---
+loginSignupBtn.addEventListener('click', () => showPage('page-auth'));
+signOutBtn.addEventListener('click', () => signOut(auth).catch(error => console.error("Sign out error", error)));
+document.getElementById('home-button').addEventListener('click', () => showPage('page-home'));
+document.querySelectorAll('.back-button').forEach(button => button.addEventListener('click', () => showPage('page-home')));
+document.querySelectorAll('.category-card-food, .category-card-medical, .category-card-education, .category-card-house').forEach(card => {
+    card.addEventListener('click', () => {
+        const pageId = card.dataset.page;
+        if (pageId) showPage(pageId);
+    });
 });
 
-signOutBtn.addEventListener('click', () => {
-    signOut(auth).catch(error => console.error("Sign out error", error));
-});
-
+// --- 4. Event Listeners for Auth Forms ---
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
     signInWithEmailAndPassword(auth, email, password)
-        .catch(error => {
-            authError.textContent = error.message;
-        });
+        .catch(error => authError.textContent = error.message);
 });
 
 signupForm.addEventListener('submit', (e) => {
@@ -92,16 +116,12 @@ signupForm.addEventListener('submit', (e) => {
     const email = document.getElementById('signup-email').value;
     const password = document.getElementById('signup-password').value;
     createUserWithEmailAndPassword(auth, email, password)
-        .catch(error => {
-            authError.textContent = error.message;
-        });
+        .catch(error => authError.textContent = error.message);
 });
 
 googleSigninBtn.addEventListener('click', () => {
     signInWithPopup(auth, provider)
-        .catch(error => {
-            authError.textContent = error.message;
-        });
+        .catch(error => authError.textContent = error.message);
 });
 
 authTabs.forEach(tab => {
@@ -114,35 +134,7 @@ authTabs.forEach(tab => {
     });
 });
 
-const showPage = (pageId) => {
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
-    const activePage = document.getElementById(pageId);
-    if (activePage) {
-        activePage.classList.add('active');
-    }
-    window.scrollTo(0, 0);
-}
-
-document.querySelectorAll('.category-card-food, .category-card-medical, .category-card-education, .category-card-house').forEach(card => {
-    card.addEventListener('click', () => {
-        const pageId = card.dataset.page;
-        if (pageId) {
-            showPage(pageId);
-        }
-    });
-});
-
-document.querySelectorAll('.back-button').forEach(button => {
-    button.addEventListener('click', () => {
-        showPage('page-home');
-    });
-});
-document.getElementById('home-button').addEventListener('click', () => {
-    showPage('page-home');
-});
-
+// --- 5. Firestore Data Handling ---
 document.querySelectorAll('form[data-collection]').forEach(form => {
     if (form) {
         form.addEventListener('submit', async e => {
@@ -172,7 +164,7 @@ document.querySelectorAll('form[data-collection]').forEach(form => {
     }
 });
 
-
+// --- 6. Real-Time Data Listeners ---
 function setupRealtimeListener(collectionName, gridElementId, cardRenderer) { 
     const q = query(collection(db, collectionName), orderBy("createdAt", "desc")); 
     const grid = document.getElementById(gridElementId); 
@@ -186,7 +178,7 @@ function setupRealtimeListener(collectionName, gridElementId, cardRenderer) {
     }
 }
 
-
+// --- 7. Card Creation Functions ---
 const createFoodCard = data => { 
     const card = document.createElement('div'); 
     card.className = 'listing-card'; 
@@ -216,24 +208,15 @@ const createHomeCard = data => {
     return card; 
 };
 
+// --- 8. Initialize all listeners ---
 setupRealtimeListener('foodDonations', 'food-listing-grid', createFoodCard);
 setupRealtimeListener('medicalDonations', 'medical-listing-grid', createMedicalCard);
 setupRealtimeListener('educationDonations', 'education-listing-grid', createEducationCard);
 setupRealtimeListener('homeDonations', 'home-listing-grid', createHomeCard);
-// Function to convert a File to a base64 string
-async function fileToBase64(file) {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result.split(',')[1]);
-        reader.onerror = error => reject(error);
-        reader.readAsDataURL(file);
-    });
-}
-const scanImageBtn = document.querySelector("#scan-image-btn");
-// Add an event listener to the scan button
-scanImageBtn.addEventListener('click', async () => {
-    const file = itemImageUpload.files[0];
 
+// --- 9. AI Image Scanning ---
+scanImageBtn.addEventListener('click', async () => {
+    const file = imageUploadInput.files[0];
     if (!file) {
         alert("Please upload an image first.");
         return;
@@ -241,51 +224,55 @@ scanImageBtn.addEventListener('click', async () => {
 
     scanResultsContainer.style.display = 'block';
     loadingIndicator.style.display = 'block';
-    identifiedItemsText.textContent = '';
-    populateFormBtn.style.display = 'none';
+    document.getElementById('scan-results').style.display = 'none';
+
+    // Convert image to Base64 and call the AI
+    const reader = new FileReader();
+    reader.onloadend = () => {
+        const base64ImageData = reader.result.split(',')[1];
+        scanImageWithGemini(base64ImageData);
+    };
+    reader.readAsDataURL(file);
+});
+
+async function scanImageWithGemini(base64ImageData) {
+    const apiKey = ""; // The environment will handle this if left blank
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+
+    const payload = {
+        contents: [{
+            parts: [
+                { text: "Identify the donatable household items in this image. List them clearly as a comma-separated list. For example: 'a blue t-shirt, a pair of jeans, a wooden chair'." },
+                { inlineData: { mimeType: "image/jpeg", data: base64ImageData } }
+            ]
+        }]
+    };
 
     try {
-        const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
-        const base64Image = await fileToBase64(file);
-        
-        const prompt = `
-            You are SahayakAI, a kind and helpful assistant for a donation app.
-            Analyze the following image and list the main items that can be donated.
-            Categorize each item as 'Clothes', 'Furniture', 'Appliances', or 'Other'.
-            For example:
-            Clothes: Winter jackets, T-shirts
-            Furniture: A small study table
-            Appliances: An old microwave oven
-            Other: A box of old toys
-
-            Identify the items in this image:
-        `;
-        
-        const result = await model.generateContent([
-            prompt, 
-            {
-                inlineData: {
-                    mimeType: file.type,
-                    data: base64Image
-                }
-            }
-        ]);
-        
-        const textResponse = result.response.text;
-        
-        loadingIndicator.style.display = 'none';
-        identifiedItemsText.textContent = textResponse;
-        populateFormBtn.style.display = 'block';
-
-        // Event listener for the "Use these items" button
-        populateFormBtn.addEventListener('click', () => {
-            homeFormDescription.value = textResponse;
-            // You can add more logic here to automatically fill other fields based on the response
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
+
+        if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
+
+        const result = await response.json();
+        const text = result.candidates[0].content.parts[0].text;
         
-    } catch (error) {
-        console.error("Error with AI scan:", error);
         loadingIndicator.style.display = 'none';
-        identifiedItemsText.textContent = 'An error occurred. Please try again or fill the form manually.';
+        document.getElementById('scan-results').style.display = 'block';
+        identifiedItemsText.textContent = text;
+    } catch (error) {
+        console.error("Error scanning image:", error);
+        loadingIndicator.textContent = 'Sorry, the scan failed. Please try again or fill the form manually.';
+    }
+}
+
+populateFormBtn.addEventListener('click', () => {
+    const items = identifiedItemsText.textContent;
+    if (items) {
+        homeFormDescription.value = items;
+        alert('Description field has been filled. Please complete the rest of the form.');
     }
 });
