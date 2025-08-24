@@ -250,12 +250,11 @@
             <div class="page-header"><button class="back-button"><i class="ph ph-arrow-left"></i></button><div><h2 style="font-size: 2rem; font-weight: 700;">Provide Education Help</h2><p style="color: var(--text-secondary);">Donate books, stationery, or other learning materials.</p></div></div>
             <div class="form-container">
                 <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 600;">List a New Education Donation</h3>
-                <!-- This form will save data to the "educationDonations" collection -->
                 <form class="form-grid" data-collection="educationDonations">
-                    <div class="form-group"><label>Item Type</label><select name="type"><option>Books</option><option>Stationery</option><option>Uniforms</option><option>Other</option></select></div>
+                    <div class="form-group"><label>School/Institution</label><input type="text" placeholder="Name of your Institution"></div>
                     <div class="form-group"><label>Age Group / Class</label><input type="text" name="ageGroup" placeholder="e.g., Ages 5-8, Class 10" required></div>
-                    <div class="form-group full-width"><label>Description</label><textarea name="description" placeholder="e.g., 50 notebooks, 10 sets of NCERT textbooks..." required></textarea></div>
-                    <div class="form-group"><label>Quantity</label><input type="text" name="quantity" placeholder="e.g., 50 notebooks, 10 sets" required></div>
+                    <div class="form-group full-width"><label>Description</label><textarea name="description" placeholder="What subjects will be taught?" required></textarea></div>
+                    <div class="form-group"><label>Slot</label><input type="text" name="quantity" placeholder="Timing of classes eg, 10AM-12PM" required></div>
                     <div class="form-group"><label>Location / Pincode</label><input type="text" name="location" placeholder="Bhubaneswar, 751010" required></div>
                     <div class="form-group full-width"><button type="submit" class="btn btn-primary">Submit Listing</button></div>
                 </form>
