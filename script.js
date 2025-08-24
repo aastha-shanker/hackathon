@@ -122,31 +122,23 @@ const showPage = (pageId) => {
     window.scrollTo(0, 0); // Scroll to the top of the new page
 };
 
-// --- Event Listeners for Navigation ---
-
-// Listener for the category cards on the homepage
 document.querySelectorAll('.category-card-food, .category-card-medical, .category-card-education, .category-card-house').forEach(card => {
     card.addEventListener('click', () => {
         const pageId = card.dataset.page;
-        // You'll need to add the other pages' HTML for this to fully work
         if (pageId) {
             showPage(pageId);
         }
     });
 });
 
-// Listener for all "back" buttons to return to the homepage
 document.querySelectorAll('.back-button').forEach(button => {
     button.addEventListener('click', () => {
         showPage('page-home');
     });
 });
-
-// Listener for the logo in the header to return home
 document.getElementById('home-button').addEventListener('click', () => {
     showPage('page-home');
 });
-
 // --- Firestore Data Handling ---
 
 // This code listens for submissions on any form that has a 'data-collection' attribute
