@@ -1,0 +1,306 @@
+/* All CSS remains the same as before */
+:root {
+  --bg-primary: #0d1117;
+  --bg-secondary: #161b22;
+  --bg-tertiary: #21262d;
+  --text-primary: #e6edf3;
+  --text-secondary: #8b949e;
+  --border-color: #30363d;
+  --accent-primary: #58a6ff;
+  --accent-secondary: #fdb813;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #0d1117;
+  color: var(--text-primary);
+}
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: auto;
+  padding: 0 1.5rem;
+}
+section {
+  padding: 5rem 0;
+}
+.header {
+  background-color: #161b22;
+  box-shadow: 0 1px 3px var(--shadow-color);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--border-color);
+}
+.header nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+.gradient-text {
+  background: linear-gradient(to right, var(--accent-primary), #93c5fd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero {
+  text-align: center;
+  padding: 5rem 0;
+}
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.hero p {
+  margin-top: 1.5rem;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+.section-header h2 {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+.section-header p {
+  margin-top: 1rem;
+  color: var(--text-secondary);
+  max-width: 36rem;
+  margin: 1rem auto 0;
+}
+.category-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(1, 1fr);
+}
+.category-card {
+  background-color: #161b22;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+.category-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 18px #56d364;
+}
+.category-card i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+.category-card h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.category-card p {
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+.icon-food {
+  color: #56d364;
+}
+.icon-medical {
+  color: #ff7b72;
+}
+.icon-education {
+  color: var(--accent-secondary);
+}
+.icon-home {
+  color: #a585ff;
+}
+.page {
+  display: none;
+}
+.page.active {
+  display: block;
+}
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+.back-button {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.5rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+.back-button:hover {
+  background: #30363d;
+}
+.back-button i {
+  font-size: 1.5rem;
+}
+.form-container {
+  background-color: #161b22;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+  max-width: 48rem;
+  margin: 0 auto 3rem auto;
+}
+.form-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background-color: #0d1117;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: "Inter", sans-serif;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+}
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+.btn {
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  font-size: 1rem;
+}
+.btn-primary {
+  background-color: var(--accent-primary);
+  color: #0d1117;
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 14px 0 rgba(88, 166, 255, 0.39);
+}
+.btn-primary:hover {
+  background-color: #79b8ff;
+}
+.listing-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+.listing-card {
+  background-color: #161b22;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.listing-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.listing-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.listing-card-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+.listing-card-tag {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+.tag-restaurant {
+  color: #56d364;
+  background-color: rgba(86, 211, 100, 0.1);
+}
+.tag-wedding {
+  color: #a585ff;
+  background-color: rgba(165, 133, 255, 0.1);
+}
+.tag-other {
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+}
+.listing-card-body {
+  color: var(--text-secondary);
+}
+.listing-card-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+@media (min-width: 640px) {
+  .category-grid,
+  .form-grid,
+  .listing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .form-group.full-width {
+    grid-column: 1 / -1;
+  }
+}
+@media (min-width: 1024px) {
+  .category-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .listing-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

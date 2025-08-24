@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon" href="sahayata_icon-removebg-preview.png" type="image/png" sizes="128x128">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  </head>
+  <body>
+    <header>
+      <header class="header">
+        <div class="container">
+          <nav>
+            <div id="home-button" class="logo gradient-text"></div>
+          </nav>
+        </div>
+      </header>
+
+      <main>
+        <div id="page-home" class="page active">
+          <section class="hero">
+            <div class="container">
+              <h1>
+                Connecting <span class="gradient-text">Kindness</span> in Your
+                Community.
+              </h1>
+              <p>
+                Sahaaya is a real-time platform where you can offer surplus
+                resources or find the help you need, creating a stronger, more
+                supportive neighborhood.
+              </p>
+            </div>
+          </section>
+          <section id="categories">
+            <div class="container">
+              <div class="section-header">
+                <h2>How would you like to help?</h2>
+                <p>
+                  Choose a category to see how you can contribute or find
+                  available aid.
+                </p>
+              </div>
+              <div class="category-grid">
+                <div class="category-card" data-page="page-food">
+                  <i class="ph-fill ph-bowl-food icon-food"></i>
+                  <h3>Donate Food</h3>
+                  <p>Share surplus meals from events or your home.</p>
+                </div>
+                <div class="category-card" data-page="page-medical">
+                  <i class="ph-fill ph-first-aid-kit icon-medical"></i>
+                  <h3>Medical Help</h3>
+                  <p>Provide supplies, equipment, or volunteer your skills.</p>
+                </div>
+                <div class="category-card" data-page="page-education">
+                  <i class="ph-fill ph-student icon-education"></i>
+                  <h3>Education Help</h3>
+                  <p>Donate books, stationery, or offer tutoring services.</p>
+                </div>
+                <div class="category-card" data-page="page-home-help">
+                  <i class="ph-fill ph-house icon-home"></i>
+                  <h3>Help from Home</h3>
+                  <p>Offer household items, clothes, or remote support.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <div id="page-food" class="page">
+          <section>
+            <div class="container">
+              <div class="page-header">
+                <button class="back-button">
+                  <i class="ph ph-arrow-left"></i>
+                </button>
+                <div>
+                  <h2 style="font-size: 2rem; font-weight: 700">
+                    Donate Surplus Food
+                  </h2>
+                  <p style="color: var(--text-secondary)">
+                    List food from your restaurant, wedding, or home.
+                  </p>
+                </div>
+              </div>
+
+              <div class="form-container">
+                <h3
+                  style="
+                    font-size: 1.5rem;
+                    margin-bottom: 1.5rem;
+                    font-weight: 600;
+                  "
+                >
+                  List a New Donation
+                </h3>
+                <form class="form-grid" id="food-donation-form">
+                  <div class="form-group">
+                    <label for="food-source">Source of Food</label>
+                    <select id="food-source" name="food-source">
+                      <option>Restaurant</option>
+                      <option>Wedding / Event</option>
+                      <option>Household</option>
+                      <option>Grocery Store</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="food-quantity">Quantity (e.g., Serves 25)</label
+                    ><input
+                      type="text"
+                      id="food-quantity"
+                      name="food-quantity"
+                      placeholder="Approx. 25-30 meals"
+                      required
+                    />
+                  </div>
+                  <div class="form-group full-width">
+                    <label for="food-description">Description</label
+                    ><textarea
+                      id="food-description"
+                      name="food-description"
+                      placeholder="e.g., Freshly packed vegetarian meals..."
+                      required
+                    ></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="food-pickup-by">Pickup By</label
+                    ><input
+                      type="datetime-local"
+                      id="food-pickup-by"
+                      name="food-pickup-by"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="food-location">Location / Pincode</label
+                    ><input
+                      type="text"
+                      id="food-location"
+                      name="food-location"
+                      placeholder="Bhubaneswar, 751010"
+                      required
+                    />
+                  </div>
+                  <div class="form-group full-width">
+                    <button type="submit" class="btn btn-primary">
+                      Submit Listing
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="section-header" style="margin-top: 4rem">
+                <h3>Available for Pickup</h3>
+              </div>
+              <div class="listing-grid" id="listing-grid"></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </header>
+    <script src="script.js"></script>
+  </body>
+</html>

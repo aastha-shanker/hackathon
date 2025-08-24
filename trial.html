@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sahaaya - Multi-Page Design</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <style>
+        /* CSS Reset & Base Styles */
+        :root {
+            --bg-primary: #0D1117;
+            --bg-secondary: #161B22;
+            --bg-tertiary: #21262D;
+            --text-primary: #E6EDF3;
+            --text-secondary: #8B949E;
+            --border-color: #30363D;
+            --accent-primary: #58A6FF;
+            --accent-secondary: #FDB813;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        section {
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+        
+        /* Header */
+        .header {
+            background-color: var(--bg-secondary);
+            box-shadow: 0 1px 3px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .header nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .gradient-text {
+            background: linear-gradient(to right, var(--accent-primary), #93C5FD);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding-top: 5rem;
+            padding-bottom: 5rem;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+        .hero p {
+            margin-top: 1.5rem;
+            max-width: 42rem;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Section Header */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .section-header h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+        }
+        .section-header p {
+            margin-top: 1rem;
+            color: var(--text-secondary);
+            max-width: 36rem;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Category Section */
+        .category-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(1, 1fr);
+        }
+        .category-card {
+            background-color: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.2s ease-in-out;
+            cursor: pointer;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 10px 15px -3px var(--shadow-color);
+        }
+        .category-card i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .category-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .category-card p {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .icon-food { color: #56D364; }
+        .icon-medical { color: #FF7B72; }
+        .icon-education { color: var(--accent-secondary); }
+        .icon-home { color: #A585FF; }
+
+        /* Generic Page Styles */
+        .page {
+            display: none; /* Pages are hidden by default */
+        }
+        .page.active {
+            display: block; /* Active page is shown */
+        }
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .back-button {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        .back-button:hover {
+            background: #30363D;
+        }
+        .back-button i {
+            font-size: 1.5rem;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background-color: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            max-width: 48rem;
+            margin: 0 auto 3rem auto;
+        }
+        .form-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.3);
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .btn {
+            font-weight: 600;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background-color: var(--accent-primary);
+            color: #0D1117;
+            border-color: var(--accent-primary);
+            box-shadow: 0 4px 14px 0 rgba(88, 166, 255, 0.39);
+        }
+        .btn-primary:hover {
+            background-color: #79B8FF;
+        }
+
+        /* Listing Styles (for food page) */
+        .listing-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        .listing-card {
+            background-color: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .listing-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .listing-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .listing-card-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .listing-card-tag {
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            white-space: nowrap;
+        }
+        .tag-restaurant { color: #56D364; background-color: rgba(86, 211, 100, 0.1); }
+        .tag-wedding { color: #A585FF; background-color: rgba(165, 133, 255, 0.1); }
+        .listing-card-body {
+            color: var(--text-secondary);
+        }
+        .listing-card-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Responsive Design */
+        @media (min-width: 640px) {
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .form-group.full-width {
+                grid-column: 1 / -1;
+            }
+             .listing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .category-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .listing-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav>
+                <div id="home-button" class="logo gradient-text">Sahaaya</div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- PAGE 1: HOME -->
+        <div id="page-home" class="page active">
+            <section class="hero">
+                <div class="container">
+                    <h1>Connecting <span class="gradient-text">Kindness</span> in Your Community.</h1>
+                    <p>Sahaaya is a real-time platform where you can offer surplus resources or find the help you need, creating a stronger, more supportive neighborhood.</p>
+                </div>
+            </section>
+
+            <section id="categories">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>How would you like to help?</h2>
+                        <p>Choose a category to see how you can contribute or find available aid.</p>
+                    </div>
+                    <div class="category-grid">
+                        <!-- Category: Food -->
+                        <div class="category-card" data-page="page-food">
+                            <i class="ph-fill ph-bowl-food icon-food"></i>
+                            <h3>Donate Food</h3>
+                            <p>Share surplus meals from restaurants, events, or your home.</p>
+                        </div>
+                        <!-- Category: Medical -->
+                        <div class="category-card" data-page="page-medical">
+                            <i class="ph-fill ph-first-aid-kit icon-medical"></i>
+                            <h3>Medical Help</h3>
+                            <p>Provide medical supplies, equipment, or volunteer your skills.</p>
+                        </div>
+                        <!-- Category: Education -->
+                        <div class="category-card" data-page="page-education">
+                            <i class="ph-fill ph-student icon-education"></i>
+                            <h3>Education Help</h3>
+                            <p>Donate books, stationery, or offer tutoring services.</p>
+                        </div>
+                        <!-- Category: From Home -->
+                        <div class="category-card" data-page="page-home-help">
+                            <i class="ph-fill ph-house icon-home"></i>
+                            <h3>Help from Home</h3>
+                            <p>Offer household items, clothes, or remote volunteer support.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE 2: FOOD DONATION -->
+        <div id="page-food" class="page">
+            <section>
+                <div class="container">
+                    <div class="page-header">
+                        <button class="back-button"><i class="ph ph-arrow-left"></i></button>
+                        <div>
+                            <h2 style="font-size: 2rem; font-weight: 700;">Donate Surplus Food</h2>
+                            <p style="color: var(--text-secondary);">List food from your restaurant, wedding, or home.</p>
+                        </div>
+                    </div>
+
+                    <!-- Food Donation Form -->
+                    <div class="form-container">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 600;">List a New Donation</h3>
+                        <form class="form-grid">
+                            <div class="form-group">
+                                <label for="food-source">Source of Food</label>
+                                <select id="food-source" name="food-source">
+                                    <option>Restaurant</option>
+                                    <option>Wedding / Event</option>
+                                    <option>Household</option>
+                                    <option>Grocery Store</option>
+                                </select>
+                            </div>
+                             <div class="form-group">
+                                <label for="food-quantity">Quantity (e.g., Serves 25)</label>
+                                <input type="text" id="food-quantity" name="food-quantity" placeholder="Approx. 25-30 meals">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="food-description">Description</label>
+                                <textarea id="food-description" name="food-description" placeholder="e.g., Freshly packed vegetarian meals, rice and dal..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="food-pickup-by">Pickup By</label>
+                                <input type="datetime-local" id="food-pickup-by" name="food-pickup-by">
+                            </div>
+                            <div class="form-group">
+                                <label for="food-location">Location / Pincode</label>
+                                <input type="text" id="food-location" name="food-location" placeholder="Bhubaneswar, 751010">
+                            </div>
+                            <div class="form-group full-width">
+                                <button type="submit" class="btn btn-primary">Submit Listing</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Current Food Listings -->
+                    <div class="section-header" style="margin-top: 4rem;">
+                        <h3>Available for Pickup</h3>
+                    </div>
+                    <div class="listing-grid">
+                        <div class="listing-card">
+                            <div class="listing-card-header">
+                                <div>
+                                    <h4 class="listing-card-title">Surplus Wedding Feast</h4>
+                                    <p class="listing-card-subtitle">Pickup by 11 PM Today</p>
+                                </div>
+                                <span class="listing-card-tag tag-wedding">Event</span>
+                            </div>
+                            <p class="listing-card-body">Large quantities of untouched food including rice, curries, and sweets. Suitable for 100+ people.</p>
+                            <div class="listing-card-footer">
+                                <span><i class="ph ph-map-pin"></i> Patia, Bhubaneswar</span>
+                                <button class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; width: auto; background: var(--bg-tertiary);">Connect</button>
+                            </div>
+                        </div>
+                        <div class="listing-card">
+                            <div class="listing-card-header">
+                                <div>
+                                    <h4 class="listing-card-title">Daily Restaurant Surplus</h4>
+                                    <p class="listing-card-subtitle">Pickup by 10 PM Today</p>
+                                </div>
+                                <span class="listing-card-tag tag-restaurant">Restaurant</span>
+                            </div>
+                            <p class="listing-card-body">Approx. 20-25 boxes of fresh veg thalis available for pickup.</p>
+                             <div class="listing-card-footer">
+                                <span><i class="ph ph-map-pin"></i> Saheed Nagar, Bhubaneswar</span>
+                                <button class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.8rem; width: auto; background: var(--bg-tertiary);">Connect</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Add other pages (medical, education, etc.) here following the same structure -->
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const pages = document.querySelectorAll('.page');
+            const categoryCards = document.querySelectorAll('.category-card');
+            const backButtons = document.querySelectorAll('.back-button');
+            const homeButton = document.getElementById('home-button');
+
+            const showPage = (pageId) => {
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                const activePage = document.getElementById(pageId);
+                if (activePage) {
+                    activePage.classList.add('active');
+                    window.scrollTo(0, 0); // Scroll to top on page change
+                }
+            };
+
+            // Navigate to category page
+            categoryCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const pageId = card.getAttribute('data-page');
+                    if(pageId) {
+                       // For now, only the food page is built.
+                       // We can add a simple alert for unbuilt pages.
+                       if(pageId === 'page-food') {
+                           showPage(pageId);
+                       } else {
+                           alert('This section is coming soon!');
+                       }
+                    }
+                });
+            });
+
+            // Navigate back
+            backButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    showPage('page-home');
+                });
+            });
+            
+            // Navigate to home via logo
+            homeButton.addEventListener('click', () => {
+                showPage('page-home');
+            });
+        });
+    </script>
+
+</body>
+</html>
