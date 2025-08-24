@@ -13,8 +13,15 @@
     signOut
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { 
+    getFirestore, 
+    collection, 
+    addDoc, 
+    onSnapshot, 
+    query, 
+    orderBy 
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
   const firebaseConfig = {
     apiKey: "AIzaSyCzAnKxMW-_B-h-EP9OVC74LBwHemf0LLM",
     authDomain: "sahayata-hackathon.firebaseapp.com",
@@ -25,14 +32,14 @@
     measurementId: "G-8FH9NS7HCK"
   };
 
-  // Initialize Firebase
+
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
 
-  // --- DOM Elements for Authentication ---
+
 const loginSignupBtn = document.getElementById('login-signup-btn');
 const signOutBtn = document.getElementById('sign-out-btn');
 const userInfo = document.getElementById('user-info');
@@ -45,10 +52,9 @@ const googleSigninBtn = document.getElementById('google-signin-btn');
 const authError = document.getElementById('auth-error');
 const authTabs = document.querySelectorAll('.auth-tab');
 
-// --- 1. Core Authentication Listener ---
+
 onAuthStateChanged(auth, user => {
     if (user) {
-        // User is signed IN
         loginSignupBtn.style.display = 'none';
         userInfo.style.display = 'flex';
         userEmailSpan.textContent = user.email;
@@ -56,7 +62,7 @@ onAuthStateChanged(auth, user => {
             showPage('page-home');
         }
     } else {
-        // User is signed OUT
+
         loginSignupBtn.style.display = 'block';
         userInfo.style.display = 'none';
         userEmailSpan.textContent = '';
@@ -109,18 +115,15 @@ authTabs.forEach(tab => {
 });
 
 const showPage = (pageId) => {
-    // First, hide all the pages
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
     });
-    
-    // Then, find the one we want and make it visible
     const activePage = document.getElementById(pageId);
     if (activePage) {
         activePage.classList.add('active');
     }
-    window.scrollTo(0, 0); // Scroll to the top of the new page
-};
+    window.scrollTo(0, 0);
+}
 
 document.querySelectorAll('.category-card-food, .category-card-medical, .category-card-education, .category-card-house').forEach(card => {
     card.addEventListener('click', () => {
@@ -139,9 +142,7 @@ document.querySelectorAll('.back-button').forEach(button => {
 document.getElementById('home-button').addEventListener('click', () => {
     showPage('page-home');
 });
-// --- Firestore Data Handling ---
 
-// This code listens for submissions on any form that has a 'data-collection' attribute
 document.querySelectorAll('form[data-collection]').forEach(form => {
     if (form) {
         form.addEventListener('submit', async e => {
@@ -171,7 +172,6 @@ document.querySelectorAll('form[data-collection]').forEach(form => {
     }
 });
 
-// --- Real-Time Data Listeners ---
 
 function setupRealtimeListener(collectionName, gridElementId, cardRenderer) { 
     const q = query(collection(db, collectionName), orderBy("createdAt", "desc")); 
@@ -186,7 +186,6 @@ function setupRealtimeListener(collectionName, gridElementId, cardRenderer) {
     }
 }
 
-// --- Card Creation Functions ---
 
 const createFoodCard = data => { 
     const card = document.createElement('div'); 
