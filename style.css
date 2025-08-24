@@ -1,4 +1,3 @@
-/* All CSS remains the same as before */
 :root {
   --bg-primary: #0d1117;
   --bg-secondary: #161b22;
@@ -60,13 +59,11 @@ section {
 }
 .hero {
   text-align: center;
-  
 }
 .hero h1 {
   font-size: 2.5rem;
   font-weight: 800;
-  margin-top: 42px
-  ;
+  margin-top: 42px;
 }
 .hero p {
   margin-top: 20px;
@@ -279,8 +276,8 @@ textarea {
   }
 }
 
-.category-card-food{
-    background-color: var(--bg-secondary);
+.category-card-food {
+  background-color: var(--bg-secondary);
   padding: 2rem;
   border-radius: 0.75rem;
   border: 1px solid var(--border-color);
@@ -308,8 +305,8 @@ textarea {
   font-size: 0.9rem;
 }
 
-.category-card-medical{
-    background-color: var(--bg-secondary);
+.category-card-medical {
+  background-color: var(--bg-secondary);
   padding: 2rem;
   border-radius: 0.75rem;
   border: 1px solid var(--border-color);
@@ -337,8 +334,8 @@ textarea {
   font-size: 0.9rem;
 }
 
-.category-card-education{
-    background-color: var(--bg-secondary);
+.category-card-education {
+  background-color: var(--bg-secondary);
   padding: 2rem;
   border-radius: 0.75rem;
   border: 1px solid var(--border-color);
@@ -366,8 +363,8 @@ textarea {
   font-size: 0.9rem;
 }
 
-.category-card-house{
-    background-color: var(--bg-secondary);
+.category-card-house {
+  background-color: var(--bg-secondary);
   padding: 2rem;
   border-radius: 0.75rem;
   border: 1px solid var(--border-color);
@@ -393,4 +390,107 @@ textarea {
   color: var(--text-secondary);
   margin-top: 0.5rem;
   font-size: 0.9rem;
+}
+.user-info {
+  display: none;
+  align-items: center;
+  gap: 1rem;
+}
+.user-info span {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.auth-button {
+  background: var(--bg-tertiary);
+  border: 1px solid #8082da;
+  color: var(--text-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: "Inter", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.auth-button:hover {
+  background-color: #30363d;
+  box-shadow: 0 0 10px #93C5FD;
+}
+
+
+.auth-page-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.auth-container {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.75rem;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+}
+.auth-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 1.5rem;
+}
+.auth-tab {
+  flex: 1;
+  padding: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  color: var(--text-secondary);
+}
+.auth-tab.active {
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+.auth-form {
+  display: none;
+}
+.auth-form.active {
+  display: block;
+}
+.btn-google {
+  background-color: #fff;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border: 1px solid var(--border-color);
+}
+.divider {
+  text-align: center;
+  color: var(--text-secondary);
+  margin: 1.5rem 0;
+  position: relative;
+}
+.divider::before,
+.divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: var(--border-color);
+}
+.divider::before {
+  left: 0;
+}
+.divider::after {
+  right: 0;
+}
+.error-message {
+  color: #ff7b72;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  text-align: center;
+  min-height: 1.2em;
 }

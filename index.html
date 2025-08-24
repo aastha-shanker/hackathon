@@ -9,16 +9,72 @@
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
   </head>
   <body>
-    <header>
       <header class="header">
         <div class="container">
           <nav>
             <div id="home-button" class="logo gradient-text">Sahayata</div>
+            <div id="user-info" class="user-info">
+                        <span id="user-email"></span>
+                        <button id="sign-out-btn" class="auth-button">Sign Out</button>
+                    </div>
+                    <button id="login-signup-btn" class="auth-button">Login / Sign In</button>
           </nav>
         </div>
       </header>
 
       <main>
+<div id="page-auth" class="page">
+    <div class="auth-page-container">
+        <div class="auth-container">
+            <div class="page-header" style="justify-content: space-between; align-items: center;">
+                <h2>Welcome</h2>
+                <button class="back-button"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Login</div>
+                <div class="auth-tab" data-tab="signup">Sign Up</div>
+            </div>
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form active">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Email</label>
+                        <input type="email" id="login-email" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </div>
+            </form>
+            <!-- Sign Up Form -->
+            <form id="signup-form" class="auth-form">
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label>Email</label>
+                        <input type="email" id="signup-email" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Password (min. 6 characters)</label>
+                        <input type="password" id="signup-password" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <button type="submit" class="btn btn-primary">Create Account</button>
+                    </div>
+                </div>
+            </form>
+            <div class="divider">or</div>
+            <button id="google-signin-btn" class="btn btn-google">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> 
+                Sign in with Google
+            </button>
+            <p id="auth-error" class="error-message"></p>
+        </div>
+    </div>
+</div>
         <div id="page-home" class="page active">
           <section class="hero">
             <div class="container">
@@ -157,8 +213,119 @@
             </div>
           </section>
         </div>
+        <!-- PAGE 3: MEDICAL HELP -->
+<div id="page-medical" class="page">
+    <section>
+        <div class="container">
+            <div class="page-header">
+                <button class="back-button"><i class="ph ph-arrow-left"></i></button>
+                <div>
+                    <h2 style="font-size: 2rem; font-weight: 700;">Offer Medical Help</h2>
+                    <p style="color: var(--text-secondary);">List unused medical supplies or equipment.</p>
+                </div>
+            </div>
+            <div class="form-container">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 600;">List a New Medical Donation</h3>
+                <!-- This form will save data to the "medicalDonations" collection -->
+                <form class="form-grid" data-collection="medicalDonations">
+                    <div class="form-group"><label>Type of Supply</label><select name="type"><option>Medicines</option><option>Equipment</option><option>First-Aid</option><option>Other</option></select></div>
+                    <div class="form-group"><label>Condition</label><select name="condition"><option>New/Unused</option><option>Gently Used</option></select></div>
+                    <div class="form-group full-width"><label>Description</label><textarea name="description" placeholder="e.g., 10 sealed strips of Paracetamol, 1 wheelchair..." required></textarea></div>
+                    <div class="form-group"><label>Quantity</label><input type="text" name="quantity" placeholder="e.g., 10 strips, 1 box" required></div>
+                    <div class="form-group"><label>Location / Pincode</label><input type="text" name="location" placeholder="Bhubaneswar, 751010" required></div>
+                    <div class="form-group full-width"><button type="submit" class="btn btn-primary">Submit Listing</button></div>
+                </form>
+            </div>
+            <div class="section-header" style="margin-top: 4rem;"><h3>Available Medical Supplies</h3></div>
+            <!-- Listings will appear here -->
+            <div class="listing-grid" id="medical-listing-grid"></div>
+        </div>
+    </section>
+</div>
+
+<!-- PAGE 4: EDUCATION HELP -->
+<div id="page-education" class="page">
+    <section>
+        <div class="container">
+            <div class="page-header"><button class="back-button"><i class="ph ph-arrow-left"></i></button><div><h2 style="font-size: 2rem; font-weight: 700;">Provide Education Help</h2><p style="color: var(--text-secondary);">Donate books, stationery, or other learning materials.</p></div></div>
+            <div class="form-container">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 600;">List a New Education Donation</h3>
+                <!-- This form will save data to the "educationDonations" collection -->
+                <form class="form-grid" data-collection="educationDonations">
+                    <div class="form-group"><label>Item Type</label><select name="type"><option>Books</option><option>Stationery</option><option>Uniforms</option><option>Other</option></select></div>
+                    <div class="form-group"><label>Age Group / Class</label><input type="text" name="ageGroup" placeholder="e.g., Ages 5-8, Class 10" required></div>
+                    <div class="form-group full-width"><label>Description</label><textarea name="description" placeholder="e.g., 50 notebooks, 10 sets of NCERT textbooks..." required></textarea></div>
+                    <div class="form-group"><label>Quantity</label><input type="text" name="quantity" placeholder="e.g., 50 notebooks, 10 sets" required></div>
+                    <div class="form-group"><label>Location / Pincode</label><input type="text" name="location" placeholder="Bhubaneswar, 751010" required></div>
+                    <div class="form-group full-width"><button type="submit" class="btn btn-primary">Submit Listing</button></div>
+                </form>
+            </div>
+            <div class="section-header" style="margin-top: 4rem;"><h3>Available Education Materials</h3></div>
+            <!-- Listings will appear here -->
+            <div class="listing-grid" id="education-listing-grid"></div>
+        </div>
+    </section>
+</div>
+
+<!-- PAGE 5: HELP FROM HOME -->
+<!-- PAGE 5: HELP FROM HOME -->
+<div id="page-home-help" class="page">
+    <section>
+        <div class="container">
+            <div class="page-header">
+                <button class="back-button"><i class="ph ph-arrow-left"></i></button>
+                <div>
+                    <h2 style="font-size: 2rem; font-weight: 700;">Help From Home</h2>
+                    <p style="color: var(--text-secondary);">Donate clothes, furniture, or other household items.</p>
+                </div>
+            </div>
+
+            <!-- AI Image Scanner Section -->
+            <div class="form-container" style="border-left: 3px solid var(--accent-secondary);">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="ph-fill ph-sparkle" style="color: var(--accent-secondary);"></i> Auto-List with AI
+                </h3>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="item-image-upload">Upload a picture of your items</label>
+                        <input type="file" id="item-image-upload" accept="image/*" style="padding: 0.5rem; background-color: var(--bg-tertiary); border-radius: 0.5rem;">
+                    </div>
+                    <div class="form-group full-width">
+                         <button type="button" id="scan-image-btn" class="btn" style="background-color: var(--accent-secondary); color: #0D1117;">Scan Image</button>
+                    </div>
+                </div>
+                <!-- Area to show results and loading state -->
+                <div id="scan-results-container" style="margin-top: 1.5rem; display: none;">
+                    <p id="loading-indicator" style="text-align: center; color: var(--text-secondary);">Scanning image, please wait...</p>
+                    <div id="scan-results" style="display: none;">
+                        <label>Identified Items:</label>
+                        <p id="identified-items-text" style="background-color: var(--bg-primary); padding: 1rem; border-radius: 0.5rem; min-height: 50px;"></p>
+                        <button type="button" id="populate-form-btn" class="btn btn-primary" style="margin-top: 1rem;">Use these items to fill form</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider">or fill manually</div>
+
+            <!-- Manual Donation Form -->
+            <div class="form-container">
+                <h3 style="font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: 600;">List a New Household Donation</h3>
+                <form class="form-grid" data-collection="homeDonations" id="home-donation-form">
+                    <div class="form-group"><label>Item Category</label><select name="category"><option>Clothes</option><option>Furniture</option><option>Appliances</option><option>Other</option></select></div>
+                    <div class="form-group"><label>Condition</label><select name="condition"><option>New</option><option>Good</option><option>Fair</option></select></div>
+                    <div class="form-group full-width"><label>Description</label><textarea id="home-form-description" name="description" placeholder="e.g., Winter jackets for adults, a small study table..." required></textarea></div>
+                    <div class="form-group"><label>Quantity</label><input type="text" name="quantity" placeholder="e.g., 5 jackets, 1 table" required></div>
+                    <div class="form-group"><label>Location / Pincode</label><input type="text" name="location" placeholder="Bhubaneswar, 751010" required></div>
+                    <div class="form-group full-width"><button type="submit" class="btn btn-primary">Submit Listing</button></div>
+                </form>
+            </div>
+            <div class="section-header" style="margin-top: 4rem;"><h3>Available Household Items</h3></div>
+            <div class="listing-grid" id="home-listing-grid"></div>
+        </div>
+    </section>
+</div>
       </main>
     </header>
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>
