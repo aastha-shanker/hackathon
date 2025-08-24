@@ -19,8 +19,8 @@ import {
     onSnapshot 
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-// Import the Google Generative AI SDK
-import { GoogleGenerativeAI } from "https://unpkg.com/@google/generative-ai";
+// REMOVE this import for Google Generative AI, as it's now loaded in the HTML
+// import { GoogleGenerativeAI } from "https://unpkg.com/@google/generative-ai";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -43,7 +43,7 @@ const provider = new GoogleAuthProvider();
 const db = getFirestore(app);
 
 // Initialize the Google Generative AI client
-const GOOGLE_API_KEY = "YOUR_API_KEY_HERE"; // Make sure to replace this with your actual API key
+const GOOGLE_API_KEY = "YOUR_API_KEY_HERE"; 
 const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
 
 // --- DOM Elements for Authentication ---
