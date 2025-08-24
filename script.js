@@ -1,6 +1,8 @@
+
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
+  import { GoogleGenerativeAI } from "https://unpkg.com/@google/generative-ai";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
   import { 
@@ -31,6 +33,8 @@
 
   const auth = getAuth(app);
   const provider = new GoogleAuthProvider();
+  const GOOGLE_API_KEY = "YOUR_API_KEY_HERE";
+    const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
 
   // --- DOM Elements for Authentication ---
 const loginSignupBtn = document.getElementById('login-signup-btn');
@@ -221,3 +225,92 @@ setupRealtimeListener('foodDonations', 'food-listing-grid', createFoodCard);
 setupRealtimeListener('medicalDonations', 'medical-listing-grid', createMedicalCard);
 setupRealtimeListener('educationDonations', 'education-listing-grid', createEducationCard);
 setupRealtimeListener('homeDonations', 'home-listing-grid', createHomeCard);
+// Add a variable to hold your API key (REPLACE WITH YOUR KEY)
+// Warning: This is a security risk for production apps.
+// For a hackathon, this is fine, but for a live app, use a server-side proxy.
+
+// Import the Google Generative AI SDK
+
+// Get the DOM elements
+const itemImageUpload = document.getElementById('item-image-upload');
+const scanImageBtn = document.getElementById('scan-image-btn');
+const scanResultsContainer = document.getElementById('scan-results-container');
+const loadingIndicator = document.getElementById('loading-indicator');
+const identifiedItemsText = document.getElementById('identified-items-text');
+const populateFormBtn = document.getElementById('populate-form-btn');
+const homeFormDescription = document.getElementById('home-form-description');
+
+// Initialize the Google Generative AI client
+
+// Function to convert a File to a base64 string
+// The API requires images to be in this format
+async function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+// Add an event listener to the scan button
+scanImageBtn.addEventListener('click', async () => {
+    const file = itemImageUpload.files[0];
+
+    if (!file) {
+        alert("Please upload an image first.");
+        return;
+    }
+
+    scanResultsContainer.style.display = 'block';
+    loadingIndicator.style.display = 'block';
+    identifiedItemsText.textContent = '';
+    populateFormBtn.style.display = 'none';
+
+    try {
+        // Prepare the prompt
+        const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+        const base64Image = await fileToBase64(file);
+        
+        const prompt = `
+            You are SahayakAI, a kind and helpful assistant for a donation app.
+            Analyze the following image and list the main items that can be donated.
+            Categorize each item as 'Clothes', 'Furniture', 'Appliances', or 'Other'.
+            For example:
+            Clothes: Winter jackets, T-shirts
+            Furniture: A small study table
+            Appliances: An old microwave oven
+            Other: A box of old toys
+
+            Identify the items in this image:
+        `;
+        
+        const result = await model.generateContent([
+            prompt, 
+            {
+                inlineData: {
+                    mimeType: file.type,
+                    data: base64Image
+                }
+            }
+        ]);
+        
+        const textResponse = result.response.text;
+        
+        loadingIndicator.style.display = 'none';
+        identifiedItemsText.textContent = textResponse;
+        populateFormBtn.style.display = 'block';
+
+        // Event listener for the "Use these items" button
+        populateFormBtn.addEventListener('click', () => {
+            homeFormDescription.value = textResponse;
+            // You can add more logic here to automatically fill other fields based on the response
+        });
+        
+    } catch (error) {
+        console.error("Error with AI scan:", error);
+        loadingIndicator.style.display = 'none';
+        identifiedItemsText.textContent = 'An error occurred. Please try again or fill the form manually.';
+    }
+});
+x
