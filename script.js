@@ -220,3 +220,72 @@ setupRealtimeListener('foodDonations', 'food-listing-grid', createFoodCard);
 setupRealtimeListener('medicalDonations', 'medical-listing-grid', createMedicalCard);
 setupRealtimeListener('educationDonations', 'education-listing-grid', createEducationCard);
 setupRealtimeListener('homeDonations', 'home-listing-grid', createHomeCard);
+// Function to convert a File to a base64 string
+async function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result.split(',')[1]);
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+// Add an event listener to the scan button
+scanImageBtn.addEventListener('click', async () => {
+    const file = itemImageUpload.files[0];
+
+    if (!file) {
+        alert("Please upload an image first.");
+        return;
+    }
+
+    scanResultsContainer.style.display = 'block';
+    loadingIndicator.style.display = 'block';
+    identifiedItemsText.textContent = '';
+    populateFormBtn.style.display = 'none';
+
+    try {
+        const model = genAI.getGenerativeModel({ model: "gemini-pro-vision" });
+        const base64Image = await fileToBase64(file);
+        
+        const prompt = `
+            You are SahayakAI, a kind and helpful assistant for a donation app.
+            Analyze the following image and list the main items that can be donated.
+            Categorize each item as 'Clothes', 'Furniture', 'Appliances', or 'Other'.
+            For example:
+            Clothes: Winter jackets, T-shirts
+            Furniture: A small study table
+            Appliances: An old microwave oven
+            Other: A box of old toys
+
+            Identify the items in this image:
+        `;
+        
+        const result = await model.generateContent([
+            prompt, 
+            {
+                inlineData: {
+                    mimeType: file.type,
+                    data: base64Image
+                }
+            }
+        ]);
+        
+        const textResponse = result.response.text;
+        
+        loadingIndicator.style.display = 'none';
+        identifiedItemsText.textContent = textResponse;
+        populateFormBtn.style.display = 'block';
+
+        // Event listener for the "Use these items" button
+        populateFormBtn.addEventListener('click', () => {
+            homeFormDescription.value = textResponse;
+            // You can add more logic here to automatically fill other fields based on the response
+        });
+        
+    } catch (error) {
+        console.error("Error with AI scan:", error);
+        loadingIndicator.style.display = 'none';
+        identifiedItemsText.textContent = 'An error occurred. Please try again or fill the form manually.';
+    }
+});
